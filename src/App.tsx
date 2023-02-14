@@ -1,25 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Users from "./components/Users";
+import {PersistQueryClientProvider} from "@tanstack/react-query-persist-client";
+import queryClient from "./query/queryClient";
+import syncStoragePersister from "./query/syncStoragePersister";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{
+        persister: syncStoragePersister,
+        buster: "blabla",
+      }}
+      onSuccess={() => queryClient.resumePausedMutations()}
+    >
+      <Users/>
+    </PersistQueryClientProvider>
   );
 }
 
